@@ -1,0 +1,8 @@
+{
+  "name": "amazon_clone_2",
+  "version": "1.0.0",
+  "dependencies": {
+    "dotenv": "^17.2.0",
+    "mysql2": "^3.4.0"
+  }
+}

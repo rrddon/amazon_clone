@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign-up</title>
+    <link rel="stylesheet" href="signup.css"/>
+</head>
+<body>
+  <div class="body">
+    <div class="login-container">
+        <form id="signup-form" method="POST">
+            <div class="tag">
+                <h2>Sign-up</h2>
+            </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email-id" required />
+            </div>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required />
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your new password" required />
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+  </div>
+</body>
+</html>
+
+
+<script>
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = {
+    email: document.getElementById('email').value,
+    username: document.getElementById('username').value,
+    password: document.getElementById('password').value,
+  };
+
+  const res = await fetch('/api/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData),
+  });
+
+  const result = await res.json();
+  if (res.ok) {
+    alert("Signup successful!");
+    window.location.href = 'login.html';
+  } else {
+    alert("Signup failed: " + result.error);
+  }
+});
+</script>
