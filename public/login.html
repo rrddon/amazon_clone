@@ -15,8 +15,8 @@
                 <h2>Login</h2>
             </div>
             <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <label for="email">email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             <div class="input-group">
@@ -36,7 +36,7 @@
 document.getElementById('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const formData = {
-    username: document.getElementById('username').value,
+    email: document.getElementById('email').value,
     password: document.getElementById('password').value,
   };
 
