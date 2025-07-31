@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end("Method not allowed");
 
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     const connection = await mysql.createConnection({
@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     });
 
     const [rows] = await connection.execute(
-      "SELECT * FROM user WHERE username = ? AND password = ?",
-      [username, password]
+      "SELECT * FROM user WHERE email = ? AND password = ?",
+      [email, password]
     );
 
     await connection.end();
