@@ -15,13 +15,18 @@
                 <h2>Login</h2>
             </div>
             <div class="input-group">
-                <label for="email">email</label>
+                <label for="username">email</label>
                 <input type="text" id="email" name="email" placeholder="Enter your email" required>
             </div>
 
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="OTP">OTP</label>
+                <input type="OTP" id="OTP" name="OTP" placeholder="Enter your OTP" required>
             </div>
 
             <button type="submit">Login</button>
@@ -38,7 +43,8 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const formData = {
     email: document.getElementById('email').value,
     password: document.getElementById('password').value,
-  };
+    OTP: document.getElementById('OTP').value
+  };                                                                  
 
   const res = await fetch('/api/login', {
     method: 'POST',
