@@ -1,11 +1,12 @@
 // api/login.js
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import { otpStore } from "/send-otp.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end("Method not allowed");
 
-  const { email, password } = req.body;
+  const { email, password, OTP } = req.body;
 
   try {
     const connection = await mysql.createConnection({
@@ -20,13 +21,29 @@ export default async function handler(req, res) {
       [email, password]
     );
 
-    await connection.end();
-
-    if (rows.length > 0) {
-      res.status(200).json({ message: "Login success" });
-    } else {
-      res.status(401).json({ message: "Invalid credentials" });
+    if (rows.length === 0) {
+      await connection.end();
+      return res.status(401).json({ message: "Invalid credentials" });
     }
+
+    const user = rows[0];
+    
+    const storedOtp = otpStore.get(email);
+
+    if (storedOtp !== OTP) {
+    await connection.end();
+    return res.status(401).json({ message: "Invalid OTP" });
+    }
+
+    // ✅ Success
+    await connection.end();
+    res.status(200).json({ message: "Login successful" });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
