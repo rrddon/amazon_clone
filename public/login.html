@@ -25,8 +25,9 @@
             </div>
 
             <div class="input-group">
-                <label for="OTP">OTP</label>
-                <input type="OTP" id="OTP" name="OTP" placeholder="Enter your OTP" required>
+              <label for="OTP">OTP</label>
+              <input type="OTP" id="OTP" name="OTP" placeholder="Enter your OTP" required>
+              <button type="button" id="send-otp">Send OTP</button>
             </div>
 
             <button type="submit">Login</button>
@@ -58,6 +59,29 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
     window.location.href = 'amazon.html';
   } else {
     alert("Login failed: " + result.message);
+  }
+});
+</script>
+
+<script>
+document.getElementById('send-otp').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  if (!email) {
+    alert("Please enter your email first.");
+    return;
+  }
+
+  const res = await fetch('/api/send-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+
+  const result = await res.json();
+  if (res.ok) {
+    alert("OTP sent to your email!");
+  } else {
+    alert("Failed to send OTP: " + result.error);
   }
 });
 </script>
