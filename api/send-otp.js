@@ -2,8 +2,8 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-
-let otpStore = {}; // You can replace this with a database or Redis in production
+// ✅ Use Map instead of object
+let otpStore = new Map();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end("Method not allowed");
@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   const { email } = req.body;
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-  // Store OTP temporarily
-  otpStore[email] = otp;
+  // ✅ Store OTP with Map
+  otpStore.set(email, otp);
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -36,6 +36,6 @@ export default async function handler(req, res) {
   }
 }
 
-export { otpStore }; // Export for use in verify API
-
+// ✅ Export the Map
+export { otpStore };
 
