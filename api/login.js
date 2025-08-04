@@ -1,7 +1,5 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import { otpStore } from "./send-otp.js";  // ✅ Make sure the path is correct
-
 dotenv.config();
 
 export default async function handler(req, res) {
@@ -27,10 +25,9 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ Use Map.get(email)
-    const storedOtp = otpStore.get(email);
+    const user = rows[0];
 
-    if (storedOtp !== OTP) {
+    if (user.otp !== OTP) {
       await connection.end();
       return res.status(401).json({ message: "Invalid OTP" });
     }
@@ -43,4 +40,3 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Server error: " + error.message });
   }
 }
-
