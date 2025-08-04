@@ -1,4 +1,8 @@
 import nodemailer from "nodemailer";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
+
 
 let otpStore = {}; // You can replace this with a database or Redis in production
 
@@ -34,3 +38,4 @@ export default async function handler(req, res) {
 }
 
 export { otpStore }; // Export for use in verify API
+
