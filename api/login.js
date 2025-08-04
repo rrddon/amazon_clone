@@ -1,7 +1,8 @@
-// api/login.js
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import { otpStore } from "./send-otp.js";  // ✅ correct path
+import { otpStore } from "./send-otp.js";  // ✅ Make sure the path is correct
+
+dotenv.config();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
@@ -10,10 +11,10 @@ export default async function handler(req, res) {
 
   try {
     const connection = await mysql.createConnection({
-      host: "sql12.freesqldatabase.com",
-      user: "sql12791474",
-      password: "ux453dciIZ",
-      database: "sql12791474",
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
 
     const [rows] = await connection.execute(
@@ -26,7 +27,8 @@ export default async function handler(req, res) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const storedOtp = otpStore.get(email); // ✅ Map get
+    // ✅ Use Map.get(email)
+    const storedOtp = otpStore.get(email);
 
     if (storedOtp !== OTP) {
       await connection.end();
@@ -37,7 +39,8 @@ export default async function handler(req, res) {
     res.status(200).json({ message: "Login successful" });
 
   } catch (error) {
-    console.error("Login Error:", error);  // ✅ logs for debugging
+    console.error("Login Error:", error);
     res.status(500).json({ error: "Server error: " + error.message });
   }
 }
+
