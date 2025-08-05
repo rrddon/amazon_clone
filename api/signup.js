@@ -1,7 +1,7 @@
 // api/signup.js
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import bcrypt from "bcryptjs"; // ✅ Add this line
+import bcrypt from "bcryptjs";
 
 dotenv.config();
 
@@ -18,7 +18,6 @@ export default async function handler(req, res) {
       database: process.env.DB_NAME,
     });
 
-    // ✅ Hash the password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await connection.query(
@@ -32,3 +31,4 @@ export default async function handler(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
