@@ -1,6 +1,9 @@
 // api/signup.js
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
+import bcrypt from "bcryptjs"; // ✅ Add this line
+
+dotenv.config();
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end("Method not allowed");
@@ -9,15 +12,18 @@ export default async function handler(req, res) {
 
   try {
     const connection = await mysql.createConnection({
-      host: "sql12.freesqldatabase.com",
-      user: "sql12791474",
-      password: "ux453dciIZ",
-      database: "sql12791474",
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME,
     });
+
+    // ✅ Hash the password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     await connection.query(
       "INSERT INTO user (email, username, password) VALUES (?, ?, ?)",
-      [email, username, password]
+      [email, username, hashedPassword]
     );
 
     await connection.end();
