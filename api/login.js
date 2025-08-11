@@ -31,20 +31,17 @@ export default async function handler(req, res) {
 
     const user = rows[0];
 
-    // ✅ Check password
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       await connection.end();
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ Check OTP
     if (user.otp !== OTP) {
       await connection.end();
       return res.status(401).json({ message: "Invalid OTP" });
     }
 
-    // ✅ Role-based redirection
     let redirectPage;
     if (user.role === "admin") {
       redirectPage = "amazon.html";
@@ -63,4 +60,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server error: " + error.message });
   }
 }
+
 
