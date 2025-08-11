@@ -56,11 +56,12 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
   const result = await res.json();
   if (res.ok) {
     alert("Login successful!");
-    window.location.href = 'amazon.html';
+    window.location.href = result.redirect; // ✅ redirect from backend
   } else {
     alert("Login failed: " + result.message);
   }
 });
+
 </script>
 
 <script>
@@ -85,3 +86,4 @@ document.getElementById('send-otp').addEventListener('click', async () => {
   }
 });
 </script>
+
