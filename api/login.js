@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import dotenv from "dotenv";
-import bcrypt from "bcryptjs"; 
+import bcrypt from "bcryptjs";
 
 dotenv.config();
 
@@ -31,19 +31,32 @@ export default async function handler(req, res) {
 
     const user = rows[0];
 
+    // ✅ Check password
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       await connection.end();
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // ✅ Check OTP
     if (user.otp !== OTP) {
       await connection.end();
       return res.status(401).json({ message: "Invalid OTP" });
     }
 
+    // ✅ Role-based redirection
+    let redirectPage;
+    if (user.role === "admin") {
+      redirectPage = "amazon.html";
+    } else {
+      redirectPage = "no-amazon.html";
+    }
+
     await connection.end();
-    return res.status(200).json({ message: "Login successful" });
+    return res.status(200).json({ 
+      message: "Login successful",
+      redirect: redirectPage 
+    });
 
   } catch (error) {
     console.error("Login Error:", error);
