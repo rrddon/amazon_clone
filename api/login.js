@@ -4,7 +4,6 @@ import bcrypt from "bcryptjs";
 
 dotenv.config();
 
-// ✅ Audit logging function
 async function logEvent(email, action, status, ip) {
   try {
     const connection = await mysql.createConnection({
@@ -31,7 +30,7 @@ export default async function handler(req, res) {
   }
 
   const { email, password, OTP } = req.body;
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; // ✅ Capture IP
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress; 
 
   try {
     const connection = await mysql.createConnection({
@@ -87,4 +86,5 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "Server error: " + error.message });
   }
 }
+
 
