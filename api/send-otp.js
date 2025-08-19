@@ -17,7 +17,6 @@ export default async function handler(req, res) {
       database: process.env.DB_NAME,
     });
 
-    // Store OTP in user table
     await connection.execute(
       "UPDATE user SET otp = ? WHERE email = ?",
       [otp, email]
@@ -46,4 +45,5 @@ export default async function handler(req, res) {
     res.status(500).json({ error: "Failed to send OTP" });
   }
 }
+
 
